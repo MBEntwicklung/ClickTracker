@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="hello">Hello clickTracker!</string>
-    <string name="app_name">clickTracker</string>
+    <string name="app_name">Click Tracker</string>
+    <string name="click">Click</string>
+    <string name="description">This is a small simple Click Tracker. Geben sie die Zielmailadresse und senden sie mit einem click auf den Button Ihre Position an diese Adresse.</string>
 </resources>
