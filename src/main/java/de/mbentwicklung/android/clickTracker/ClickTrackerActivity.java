@@ -51,27 +51,9 @@ public class ClickTrackerActivity extends Activity {
 
 			@Override
 			public void onClick(View view) {
-				getGPSPosition();
-				//
+				loadGPSPosition();
 			}
 		});
-	}
-
-	private String getGPSPosition() {
-		StringBuilder builder = new StringBuilder();
-
-		builder.append(position.getLat() + " - " + position.getLng());
-		System.out.println(builder);
-
-		return "";
-	}
-
-	private void initMailSender() {
-		MailSender mailSender = new MailSender();
-		String[] mailAddr = { "winhasser@googlemail.com", "" };
-		startActivity(Intent.createChooser(
-				mailSender.buildMailIntent(mailAddr, position),
-				"Send position.. "));
 	}
 
 	private void initLocationListener() {
@@ -79,8 +61,7 @@ public class ClickTrackerActivity extends Activity {
 		position = new Position() {
 			@Override
 			public void positionLoaded() {
-				initMailSender();
-
+				loadMailSender();
 			}
 		};
 		locationListener = new SimpleLocationListener(position);
@@ -89,5 +70,22 @@ public class ClickTrackerActivity extends Activity {
 				.getSystemService(Context.LOCATION_SERVICE);
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
 				1000L, 500.0f, locationListener);
+	}
+
+	private String loadGPSPosition() {
+		StringBuilder builder = new StringBuilder();
+
+		builder.append(position.getLat() + " - " + position.getLng());
+		System.out.println(builder);
+
+		return "";
+	}
+
+	private void loadMailSender() {
+		MailSender mailSender = new MailSender();
+		String[] mailAddr = { mailEditText.getText().toString() };
+		startActivity(Intent.createChooser(
+				mailSender.buildMailIntent(mailAddr, position),
+				"Send position.. "));
 	}
 }

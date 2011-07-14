@@ -18,11 +18,17 @@ public class MailSender {
 		mailIntent.setType("plain/text");
 		mailIntent.putExtra(Intent.EXTRA_EMAIL, mailAddr);
 		mailIntent.putExtra(Intent.EXTRA_SUBJECT, "Hello Android Text");
-		mailIntent.putExtra(
-				Intent.EXTRA_TEXT,
-				"Das ist der erste Test. Aktuelle Position: "
-						+ position.getLat() + ", " + position.getLng());
+		mailIntent.putExtra(Intent.EXTRA_TEXT, buildMailMessage(position));
 		return mailIntent;
 	}
 
+	private String buildMailMessage(final Position position) {
+		StringBuilder builder = new StringBuilder();
+
+		builder.append("Ihnen wurde eine Position mitgeteilt.")
+				.append("Postion LNG: ").append(position.getLng())
+				.append("LAT: ").append(position.getLat());
+
+		return builder.toString();
+	}
 }
