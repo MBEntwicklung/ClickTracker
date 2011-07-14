@@ -1,14 +1,16 @@
 /**
  * 
  */
-package de.mbentwicklung.android.clickTracker;
+package de.mbentwicklung.android.clickTracker.positioning;
 
 /**
  * @author marc
  * 
  */
-public class Position {
+public abstract class Position {
 
+	public abstract void positionLoaded();
+	
 	private double lat;
 	private double lng;
 

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.mbentwicklung.android.clickTracker;
+package de.mbentwicklung.android.clickTracker.positioning;
 
 import android.location.Location;
 import android.location.LocationListener;
@@ -29,6 +29,9 @@ public class SimpleLocationListener implements LocationListener {
 	public void onLocationChanged(Location location) {
 		position.setLat(location.getLatitude());
 		position.setLng(location.getLongitude());
+		
+		System.out.println(position.getLat() + " - " + position.getLng());
+		position.positionLoaded();
 	}
 
 	/*
