@@ -7,6 +7,53 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>apk</packaging>
 	<name>ClickTracker</name>
+	<description>A simple Android App to send your position with one click</description>
+
+	<url>http://clicktracker.mb-entwicklung.de</url>
+	<inceptionYear>2011</inceptionYear>
+	<organization>
+		<name>MBEntwicklung</name>
+		<url>http://www.mb-entwicklung.de</url>
+	</organization>
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<comments>
+				Copyright ${project.inceptionYear} ${project.organization.name}. 
+				Licensed under the Apache License, Version 2.0 (the "License");
+				you may not use this file except in compliance with the License.
+				You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+				Unless required by applicable law or agreed to in writing, software
+				distributed under the License is distributed on an "AS IS" BASIS,
+				WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+				See the License for the specific language governing permissions and
+				limitations under the License.
+			</comments>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<id>1</id>
+			<email>marc.bellmann@mb-entwicklung.de</email>
+			<name>Marc Bellmann</name>
+			<organization>MBEntwicklung</organization>
+			<organizationUrl>http://www.mb-entwicklung.de</organizationUrl>
+			<url>http://www.marc-bellmann.de</url>
+		</developer>
+	</developers>
+
+	<scm>
+		<connection>scm:git:https://MBEntwicklung@github.com/MBEntwicklung/clicktracker.git</connection>
+		<developerConnection>scm:git:https://MBEntwicklung@github.com/MBEntwicklung/clicktracker.git</developerConnection>
+		<url>scm:git:https://MBEntwicklung@github.com/MBEntwicklung/clicktracker.git</url>
+	</scm>
+
+	<issueManagement>
+		<system>Mantis</system>
+		<url>http://bugtracker.mb-entwicklung.de</url>
+	</issueManagement>
 
 	<dependencies>
 		<dependency>
@@ -17,7 +64,38 @@
 		</dependency>
 	</dependencies>
 
+	<distributionManagement>
+		<!-- use the following if you're not using a snapshot version. -->
+		<repository>
+			<id>mbentwicklung-repository</id>
+			<name>MBEntwicklung FTP Repository</name>
+			<url>ftp://ftp.mb-entwicklung.de</url>
+		</repository>
+		<snapshotRepository>
+			<id>mbentwicklung-repository</id>
+			<name>MBEntwicklung FTP Repository</name>
+			<url>ftp://ftp.mb-entwicklung.de</url>
+		</snapshotRepository>
+
+		<downloadUrl>ftp://ftp.mb-entwicklung.de</downloadUrl>
+	</distributionManagement>
+
+	<repositories>
+		<repository>
+			<id>mbentwicklung-repository</id>
+			<name>Das MBEntwicklung Repository</name>
+			<url>ftp://ftp.mb-entwicklung.de</url>
+		</repository>
+	</repositories>
+
 	<build>
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ftp</artifactId>
+				<version>1.0-beta-7</version>
+			</extension>
+		</extensions>
 		<plugins>
 			<plugin>
 				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
@@ -45,6 +123,13 @@
 					<source>1.5</source>
 					<target>1.5</target>
 				</configuration>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.1</version>
+				<configuration />
 			</plugin>
 		</plugins>
 	</build>
