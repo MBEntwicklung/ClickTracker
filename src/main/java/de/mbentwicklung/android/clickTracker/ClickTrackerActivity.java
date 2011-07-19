@@ -9,6 +9,8 @@ import de.mbentwicklung.android.clickTracker.positioning.SimpleLocationListener;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -20,6 +22,10 @@ import android.widget.EditText;
  * @author Marc Bellmann <marc.bellmann@mb-entwicklung.de>
  */
 public class ClickTrackerActivity extends Activity {
+
+	private static final String MAIL_KEY = "MAIL";
+
+	private static final String SAVED_MAIL_FILE = "ClickTracker_Mail";
 
 	private Button clickButton;
 
@@ -41,6 +47,9 @@ public class ClickTrackerActivity extends Activity {
 
 	private void initMailEditText() {
 		mailEditText = (EditText) findViewById(R.id.mail_editText);
+		SharedPreferences preferences = getApplicationContext().getSharedPreferences(SAVED_MAIL_FILE, MODE_PRIVATE);
+		
+		mailEditText.setText(preferences.getString(MAIL_KEY, ""));
 	}
 
 	private void initClickButton() {
@@ -52,6 +61,10 @@ public class ClickTrackerActivity extends Activity {
 			@Override
 			public void onClick(View view) {
 				loadGPSPosition();
+				SharedPreferences preferences = getApplicationContext().getSharedPreferences(SAVED_MAIL_FILE, MODE_PRIVATE);
+				Editor editor = preferences.edit();
+				editor.putString(MAIL_KEY,mailEditText.getText().toString());
+				editor.commit();
 			}
 		});
 	}
