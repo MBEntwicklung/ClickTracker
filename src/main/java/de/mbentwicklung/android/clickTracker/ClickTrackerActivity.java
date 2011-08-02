@@ -3,9 +3,6 @@
  */
 package de.mbentwicklung.android.clickTracker;
 
-import de.mbentwicklung.android.clickTracker.mail.MailSender;
-import de.mbentwicklung.android.clickTracker.positioning.Position;
-import de.mbentwicklung.android.clickTracker.positioning.SimpleLocationListener;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +14,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import de.mbentwicklung.android.clickTracker.mail.MailService;
+import de.mbentwicklung.android.clickTracker.positioning.Position;
+import de.mbentwicklung.android.clickTracker.positioning.SimpleLocationListener;
 
 /**
  * @author Marc Bellmann <marc.bellmann@mb-entwicklung.de>
@@ -47,23 +47,23 @@ public class ClickTrackerActivity extends Activity {
 
 	private void initMailEditText() {
 		mailEditText = (EditText) findViewById(R.id.mail_editText);
-		SharedPreferences preferences = getApplicationContext().getSharedPreferences(SAVED_MAIL_FILE, MODE_PRIVATE);
-		
+		SharedPreferences preferences = getApplicationContext()
+				.getSharedPreferences(SAVED_MAIL_FILE, MODE_PRIVATE);
+
 		mailEditText.setText(preferences.getString(MAIL_KEY, ""));
 	}
 
 	private void initClickButton() {
 
 		clickButton = (Button) findViewById(R.id.button_click);
-
 		clickButton.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View view) {
-				loadGPSPosition();
-				SharedPreferences preferences = getApplicationContext().getSharedPreferences(SAVED_MAIL_FILE, MODE_PRIVATE);
+				SharedPreferences preferences = getApplicationContext()
+						.getSharedPreferences(SAVED_MAIL_FILE, MODE_PRIVATE);
 				Editor editor = preferences.edit();
-				editor.putString(MAIL_KEY,mailEditText.getText().toString());
+				editor.putString(MAIL_KEY, mailEditText.getText().toString());
 				editor.commit();
 			}
 		});
@@ -72,9 +72,12 @@ public class ClickTrackerActivity extends Activity {
 	private void initLocationListener() {
 
 		position = new Position() {
+			/** serialVersionUID */
+			private static final long serialVersionUID = 814576456000699370L;
+
 			@Override
 			public void positionLoaded() {
-				loadMailSender();
+				sendMailWithService();
 			}
 		};
 		locationListener = new SimpleLocationListener(position);
@@ -85,20 +88,12 @@ public class ClickTrackerActivity extends Activity {
 				1000L, 500.0f, locationListener);
 	}
 
-	private String loadGPSPosition() {
-		StringBuilder builder = new StringBuilder();
-
-		builder.append(position.getLat() + " - " + position.getLng());
-		System.out.println(builder);
-
-		return "";
+	private void sendMailWithService() {
+		Intent intent = new Intent(this, MailService.class);
+		intent.putExtra(MailService.KEY_MAIL_POSITION,
+				PositionLinkBuilder.buildLinkWith(position));
+		intent.putExtra(MailService.KEY_MAIL_TO_ADDR, mailEditText.getText().toString());
+		startService(intent);
 	}
 
-	private void loadMailSender() {
-		MailSender mailSender = new MailSender();
-		String[] mailAddr = { mailEditText.getText().toString() };
-		startActivity(Intent.createChooser(
-				mailSender.buildMailIntent(mailAddr, position),
-				"Send position.. "));
-	}
 }

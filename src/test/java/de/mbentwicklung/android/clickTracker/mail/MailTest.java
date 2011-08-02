@@ -3,8 +3,6 @@
  */
 package de.mbentwicklung.android.clickTracker.mail;
 
-import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,19 +12,16 @@ import org.junit.Test;
  */
 public class MailTest {
 
-	private Mail mail;
-	
 	/**
 	 * @throws java.lang.Exception
 	 */
 	@Before
 	public void setUp() throws Exception {
-		mail = new Mail();
 	}
 
 	@Test
-	public void test() {
-		mail.send();
+	public void testSendMail() {
+		new Mail().to("spam-test@spambog.com").with("Test Mail").send();
 	}
 
 }
