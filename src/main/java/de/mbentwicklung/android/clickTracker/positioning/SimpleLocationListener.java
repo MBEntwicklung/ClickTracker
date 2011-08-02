@@ -5,6 +5,7 @@ package de.mbentwicklung.android.clickTracker.positioning;
 
 import android.location.Location;
 import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 
 /**
@@ -13,9 +14,11 @@ import android.os.Bundle;
 public class SimpleLocationListener implements LocationListener {
 
 	private final Position position;
+	private final LocationManager locationManager;
 	
-	public SimpleLocationListener(final Position position) {
-		this.position = position;
+	public SimpleLocationListener(final PositionLoader positionLoader) {
+		this.position = positionLoader.getPosition();
+		this.locationManager = positionLoader.getLocationManager();
 	}
 	
 	/*
@@ -32,6 +35,7 @@ public class SimpleLocationListener implements LocationListener {
 		
 		System.out.println(position.getLat() + " - " + position.getLng());
 		position.positionLoaded();
+		locationManager.removeUpdates(this);
 	}
 
 	/*
