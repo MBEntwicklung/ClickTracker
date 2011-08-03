@@ -44,7 +44,7 @@ public class PositionLoader {
 		final LocationListener locationListener = new SimpleLocationListener(this);
 
 		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
-				1000L, 500.0f, locationListener);
+				0, 0.0f, locationListener);
 	}
 
 	public Position getPosition() {
