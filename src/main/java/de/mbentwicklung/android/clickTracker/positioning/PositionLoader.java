@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import android.app.NotificationManager;
 import android.content.Context;
-import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
