@@ -13,6 +13,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
+import de.mbentwicklung.android.clickTracker.mail.MailMessageBuilder;
 import de.mbentwicklung.android.clickTracker.mail.MailService;
 import de.mbentwicklung.android.clickTracker.positioning.Position;
 import de.mbentwicklung.android.clickTracker.positioning.PositionLoader;
@@ -30,6 +32,8 @@ public class ClickTrackerActivity extends Activity {
 
 	private EditText mailEditText;
 
+	private RadioGroup selectBox;
+
 	private Position position;
 
 	@Override
@@ -38,7 +42,12 @@ public class ClickTrackerActivity extends Activity {
 		setContentView(R.layout.main);
 
 		initMailEditText();
+		initSelectBox();
 		initClickButton();
+	}
+
+	private void initSelectBox() {
+		selectBox = (RadioGroup) findViewById(R.id.SelectPositionType);
 	}
 
 	private void initMailEditText() {
@@ -79,16 +88,26 @@ public class ClickTrackerActivity extends Activity {
 			}
 		};
 
-		LocationManager locationManager = (LocationManager) getApplicationContext()
-				.getSystemService(Context.LOCATION_SERVICE);
-		new PositionLoader(locationManager, position).loadGPSPosition();
+		Context context = getApplicationContext();
 
+		switch (selectBox.getCheckedRadioButtonId()) {
+		case R.id.gps:
+			new PositionLoader(context, position).loadGPSPosition();
+			break;
+		case R.id.network:
+			new PositionLoader(context, position).loadNetworkPosition();
+			break;
+		case R.id.last:
+			new PositionLoader(context, position).loadLastKnownPosition();
+			break;
+
+		}
 	}
 
 	private void sendMailWithService() {
 		Intent intent = new Intent(this, MailService.class);
 		intent.putExtra(MailService.KEY_MAIL_POSITION,
-				PositionLinkBuilder.buildLinkWith(position));
+				MailMessageBuilder.buildLinkWith(position));
 		intent.putExtra(MailService.KEY_MAIL_TO_ADDR, mailEditText.getText()
 				.toString());
 		startService(intent);

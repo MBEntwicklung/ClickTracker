@@ -4,6 +4,7 @@
 package de.mbentwicklung.android.clickTracker.mail;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -20,6 +21,7 @@ public class MailTest {
 	}
 
 	@Test
+	@Ignore
 	public void testSendMail() {
 		new Mail().to("spam-test@spambog.com").with("Test Mail").send();
 	}

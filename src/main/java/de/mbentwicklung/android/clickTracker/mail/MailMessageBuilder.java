@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.mbentwicklung.android.clickTracker;
+package de.mbentwicklung.android.clickTracker.mail;
 
 import de.mbentwicklung.android.clickTracker.positioning.Position;
 
@@ -9,7 +9,7 @@ import de.mbentwicklung.android.clickTracker.positioning.Position;
  * @author marc
  *
  */
-public class PositionLinkBuilder {
+public class MailMessageBuilder {
 
 	/** Web Addresse der anzuzeigenden Webseite */
 	private static final String WEBSITE = "http://clicktracker.mb-entwicklung.de/";
