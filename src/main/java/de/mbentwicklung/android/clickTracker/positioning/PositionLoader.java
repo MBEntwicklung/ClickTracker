@@ -6,18 +6,16 @@ package de.mbentwicklung.android.clickTracker.positioning;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.mbentwicklung.android.clickTracker.LedManager;
-
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import de.mbentwicklung.android.clickTracker.LedManager;
 
 /**
- * @author marc
- * 
+ * @author Marc Bellmann
  */
 public class PositionLoader {
 
@@ -65,6 +63,7 @@ public class PositionLoader {
 	private void loadPosition(final String locationProvider) {
 		final LocationListener locationListener = new SimpleLocationListener(this);
 
+		locationManager.getAllProviders();
 		locationManager.requestLocationUpdates(locationProvider, 1000L,
 				500.0f, locationListener);
 		ledManager.startBlinking();

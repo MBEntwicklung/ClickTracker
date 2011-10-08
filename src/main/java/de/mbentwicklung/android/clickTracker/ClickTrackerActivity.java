@@ -65,6 +65,7 @@ public class ClickTrackerActivity extends Activity {
 
 			@Override
 			public void onClick(View view) {
+				clickButton.setEnabled(false);
 				loadLocation();
 
 				SharedPreferences preferences = getApplicationContext()
@@ -85,6 +86,7 @@ public class ClickTrackerActivity extends Activity {
 			@Override
 			public void positionLoaded() {
 				sendMailWithService();
+				clickButton.setEnabled(true);
 			}
 		};
 
@@ -94,9 +96,9 @@ public class ClickTrackerActivity extends Activity {
 		case R.id.gps:
 			new PositionLoader(context, position).loadGPSPosition();
 			break;
-		case R.id.network:
-			new PositionLoader(context, position).loadNetworkPosition();
-			break;
+//		case R.id.network:
+//			new PositionLoader(context, position).loadNetworkPosition();
+//			break;
 		case R.id.last:
 			new PositionLoader(context, position).loadLastKnownPosition();
 			break;
