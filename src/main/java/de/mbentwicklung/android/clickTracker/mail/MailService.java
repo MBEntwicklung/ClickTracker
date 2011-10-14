@@ -28,7 +28,7 @@ public class MailService extends IntentService {
 		final Bundle bundle = intent.getExtras();
 		final String to = bundle.getString(KEY_MAIL_TO_ADDR);
 		final String tx = bundle.getString(KEY_MAIL_POSITION);
-		new Mail().to(to).with(tx).send();
+		new MailSender().to(to).with(tx).send();
 
 	}
 

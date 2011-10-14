@@ -23,7 +23,7 @@ public class MailTest {
 	@Test
 	@Ignore
 	public void testSendMail() {
-		new Mail().to("spam-test@spambog.com").with("Test Mail").send();
+		new MailSender().to("spam-test@spambog.com").with("Test Mail").send();
 	}
 
 }

@@ -3,9 +3,11 @@
  */
 package de.mbentwicklung.android.clickTracker.mail;
 
+import java.security.Security;
 import java.util.Date;
 import java.util.Properties;
 
+import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -20,7 +22,7 @@ import org.slf4j.LoggerFactory;
  * @author marc
  * 
  */
-public class Mail {
+public class MailSender extends Authenticator {
 
 	private static final String STD_SUBJECT = "Position from ClickTracker App";
 	private static final String SMTP = "smtp";
@@ -30,31 +32,37 @@ public class Mail {
 	private static final String SMTP_SERVER = "smtp.mb-entwicklung.de";
 	private static final String FROM_MAIL_ADDR = "clicktracker@mb-entwicklung.de";
 	
-	private Logger logger = LoggerFactory.getLogger(Mail.class);
+	private Logger logger = LoggerFactory.getLogger(MailSender.class);
+	
+	private final Session session;
 	
 	private String toAddr;
 	private String withPositionLink;
 
-	public Mail() {
+    static {   
+        Security.addProvider(new MailProvider());   
+    }  
+
+	public MailSender() {
+		Properties props = new Properties();
+		props.put("mail.smtp.auth", "true");
+
+        session = Session.getDefaultInstance(props, this);   
 	}
 
-	public Mail to(final String addr) {
+	public MailSender to(final String addr) {
 		this.toAddr = addr;
 		return this;
 	}
 
-	public Mail with(final String positionLink) {
+	public MailSender with(final String positionLink) {
 		this.withPositionLink = positionLink;
 		return this;
 	}
 
 	public void send() {
 		logger.info("Send mail to " + toAddr + " with " + withPositionLink);
-		
-		Properties props = new Properties();
-		props.put("mail.smtp.auth", "true");
 
-		Session session = Session.getInstance(props, null);
 		MimeMessage message = new MimeMessage(session);
 		try {
 			message.setFrom(new InternetAddress(FROM_MAIL_ADDR));
