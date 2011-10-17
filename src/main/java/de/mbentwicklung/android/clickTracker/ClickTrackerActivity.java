@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import de.mbentwicklung.android.ClickTracker.R;
 import de.mbentwicklung.android.clickTracker.mail.MailMessageBuilder;
 import de.mbentwicklung.android.clickTracker.mail.MailService;
 import de.mbentwicklung.android.clickTracker.positioning.Position;
@@ -95,9 +96,9 @@ public class ClickTrackerActivity extends Activity {
 		case R.id.gps:
 			new PositionLoader(context, position).loadGPSPosition();
 			break;
-//		case R.id.network:
-//			new PositionLoader(context, position).loadNetworkPosition();
-//			break;
+		case R.id.network:
+			new PositionLoader(context, position).loadNetworkPosition();
+			break;
 		case R.id.last:
 			new PositionLoader(context, position).loadLastKnownPosition();
 			break;

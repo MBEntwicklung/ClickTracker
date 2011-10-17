@@ -31,6 +31,9 @@ public class SimpleLocationListener implements LocationListener {
 	 * Der {@link PositionLoader}
 	 */
 	private final PositionLoader positionLoader;
+	
+	/** Ist der Provider aktiviert */
+	private boolean active;
 
 	/**
 	 * 
@@ -71,6 +74,7 @@ public class SimpleLocationListener implements LocationListener {
 	 */
 	@Override
 	public void onProviderEnabled(String provider) {
+		active = true;
 	}
 
 	/**
@@ -78,5 +82,14 @@ public class SimpleLocationListener implements LocationListener {
 	 */
 	@Override
 	public void onProviderDisabled(String provider) {
+		active = false;
+	}
+	
+	/**
+	 * Ist der Provider aktiv
+	 * @return Aktiv?
+	 */
+	public boolean isActive() {
+		return active;
 	}
 }
