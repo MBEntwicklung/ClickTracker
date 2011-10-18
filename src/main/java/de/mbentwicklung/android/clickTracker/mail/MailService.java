@@ -17,15 +17,15 @@ import android.os.Bundle;
  */
 public class MailService extends IntentService {
 
-	public MailService() {
-		super("Mail Service");
-	}
-
 	/** Key für Extra Paramater Empfänger der Mail */
 	public static final String KEY_MAIL_TO_ADDR = "keyMailToAddr";
 
 	/** Key für Extra Paramater Position */
 	public static final String KEY_POSITION_LINK = "keyMailPosition";
+
+	public MailService() {
+		super("Mail Service");
+	}
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
