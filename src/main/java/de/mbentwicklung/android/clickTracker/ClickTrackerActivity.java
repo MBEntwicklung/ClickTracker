@@ -3,6 +3,9 @@
  */
 package de.mbentwicklung.android.clickTracker;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -29,6 +32,8 @@ public class ClickTrackerActivity extends Activity {
 
 	private static final String SAVED_MAIL_FILE = "ClickTracker_Mail";
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(ClickTrackerActivity.class);
+	
 	private Button clickButton;
 
 	private EditText mailEditText;
@@ -50,9 +55,9 @@ public class ClickTrackerActivity extends Activity {
 	private void initSelectBox() {
 		selectBox = (RadioGroup) findViewById(R.id.SelectPositionType);
 		
+		LOGGER.debug("is GPS Provider enabled: " + isProviderEnabled(LocationManager.GPS_PROVIDER));
 		findViewById(R.id.gps).setEnabled(isProviderEnabled(LocationManager.GPS_PROVIDER));
 		findViewById(R.id.network).setEnabled(isProviderEnabled(LocationManager.NETWORK_PROVIDER));
-		
 	}
 
 	private boolean isProviderEnabled(final String provider) {
