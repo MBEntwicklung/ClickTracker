@@ -3,6 +3,10 @@
  */
 package de.mbentwicklung.android.clickTracker.mail;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
+
+import de.mbentwicklung.android.clickTracker.R;
 import android.app.IntentService;
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,7 +32,18 @@ public class MailService extends IntentService {
 		final Bundle bundle = intent.getExtras();
 		final String to = bundle.getString(KEY_MAIL_TO_ADDR);
 		final String tx = bundle.getString(KEY_POSITION_LINK);
-		new MailSender().to(to).with(tx).send();
+		try {
+			new MailSender()
+				.withTarget(to).withPostionLink(tx)
+				.withCurrentDate()
+				.withText(getText(R.string.mail_text).toString())
+				.withSubject(getText(R.string.mail_subject).toString())
+				.send();
+		} catch (AddressException e) {
+			throw new IllegalStateException(e);
+		} catch (MessagingException e) {
+			throw new IllegalStateException(e);
+		}
 
 	}
 

@@ -8,4 +8,7 @@
     <string name="GPS">GPS</string>
 	<string name="network">Netzwerk</string>
 	<string name="lastPos">Letzte bekannte Position</string>
+	
+	<string name="mail_subject">Position from ClickTracker App</string>
+	<string name="mail_text">Hello,\nClickTracker App send the position</string>
 </resources>

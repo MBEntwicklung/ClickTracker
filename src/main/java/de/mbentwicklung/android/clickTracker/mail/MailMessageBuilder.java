@@ -13,7 +13,7 @@ public class MailMessageBuilder {
 	/** Web Addresse der anzuzeigenden Webseite */
 	private static final String WEBSITE = "http://clicktracker.mb-entwicklung.de/";
 
-	public static String buildLinkWith(final Position position) {
+	public static final String buildLinkWith(final Position position) {
 		StringBuilder builder = new StringBuilder();
 
 		builder.append(WEBSITE).append("?lat=").append(position.getLat()).append("&lng=")
@@ -21,5 +21,4 @@ public class MailMessageBuilder {
 
 		return builder.toString();
 	}
-
 }

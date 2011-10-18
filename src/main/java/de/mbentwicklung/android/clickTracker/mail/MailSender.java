@@ -12,74 +12,77 @@ import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
- * @author marc
- * 
+ * @author Marc Bellmann <marc.bellmann@mb-entwicklung.de>
  */
 public class MailSender extends Authenticator {
 
-	private static final String STD_SUBJECT = "Position from ClickTracker App";
 	private static final String SMTP = "smtp";
 	private static final String SMTP_PASS = "nAGzRGWrYeqs6ns6";
 	private static final String SMTP_USER = "m0209ea8";
 	private static final int SMTP_PORT = 25;
 	private static final String SMTP_SERVER = "smtp.mb-entwicklung.de";
 	private static final String FROM_MAIL_ADDR = "clicktracker@mb-entwicklung.de";
-	
-	private Logger logger = LoggerFactory.getLogger(MailSender.class);
-	
-	private final Session session;
-	
-	private String toAddr;
-	private String withPositionLink;
 
-    static {   
-        Security.addProvider(new MailProvider());   
-    }  
+	private final Session session;
+
+	private InternetAddress[] targetAddr;
+	private String positionLink;
+	private String subject;
+	private String text;
+	private Date date;
+
+	static {
+		Security.addProvider(new MailProvider());
+	}
 
 	public MailSender() {
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
 
-        session = Session.getDefaultInstance(props, this);   
+		session = Session.getDefaultInstance(props, this);
 	}
 
-	public MailSender to(final String addr) {
-		this.toAddr = addr;
+	public MailSender withTarget(final String addr) throws AddressException {
+		this.targetAddr = InternetAddress.parse(addr);
 		return this;
 	}
 
-	public MailSender with(final String positionLink) {
-		this.withPositionLink = positionLink;
+	public MailSender withPostionLink(final String positionLink) {
+		this.positionLink = positionLink;
 		return this;
 	}
 
-	public void send() {
-		logger.info("Send mail to " + toAddr + " with " + withPositionLink);
+	public MailSender withSubject(final String subject) {
+		this.subject = subject;
+		return this;
+	}
 
+	public MailSender withText(final String text) {
+		this.text = text;
+		return this;
+	}
+
+	public MailSender withCurrentDate() {
+		this.date = new Date();
+		return this;
+	}
+
+	public void send() throws MessagingException {
 		MimeMessage message = new MimeMessage(session);
-		try {
-			message.setFrom(new InternetAddress(FROM_MAIL_ADDR));
-			message.setRecipients(Message.RecipientType.TO,
-					InternetAddress.parse(toAddr));
-			message.setSubject(STD_SUBJECT);
-			message.setSentDate(new Date());
-			message.setText("Hello " + toAddr + ",\n"
-					+ "ClickTracker App send the position " + withPositionLink);
+		message.setFrom(new InternetAddress(FROM_MAIL_ADDR));
+		message.setRecipients(Message.RecipientType.TO, targetAddr);
+		message.setSubject(subject);
+		message.setSentDate(date);
+		message.setText(text + " " + positionLink);
 
-			Transport transport = session.getTransport(SMTP);
-			transport.connect(SMTP_SERVER, SMTP_PORT, SMTP_USER, SMTP_PASS);
-			transport.sendMessage(message, message.getAllRecipients());
-			transport.close();
-		} catch (MessagingException e) {
-			System.out.println(e.getMessage());
-			e.printStackTrace();
-		}
+		Transport transport = session.getTransport(SMTP);
+		transport.connect(SMTP_SERVER, SMTP_PORT, SMTP_USER, SMTP_PASS);
+		transport.sendMessage(message, message.getAllRecipients());
+		transport.close();
 	}
 }
