@@ -6,8 +6,7 @@ package de.mbentwicklung.android.clickTracker.mail;
 import de.mbentwicklung.android.clickTracker.positioning.Position;
 
 /**
- * @author marc
- *
+ * @author Marc Bellmann <marc.bellmann@mb-entwicklung.de>
  */
 public class MailMessageBuilder {
 
@@ -17,11 +16,10 @@ public class MailMessageBuilder {
 	public static String buildLinkWith(final Position position) {
 		StringBuilder builder = new StringBuilder();
 
-		builder.append("Ihnen wurde eine Position mitgeteilt. ")
-				.append(WEBSITE + "?lat=").append(position.getLat())
-				.append("&lng=").append(position.getLng());
+		builder.append(WEBSITE).append("?lat=").append(position.getLat()).append("&lng=")
+				.append(position.getLng());
 
 		return builder.toString();
 	}
-	
+
 }

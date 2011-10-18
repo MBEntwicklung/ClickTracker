@@ -21,13 +21,13 @@ public class MailService extends IntentService {
 	public static final String KEY_MAIL_TO_ADDR = "keyMailToAddr";
 
 	/** Key für Extra Paramater Position */
-	public static final String KEY_MAIL_POSITION = "keyMailPosition";
+	public static final String KEY_POSITION_LINK = "keyMailPosition";
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		final Bundle bundle = intent.getExtras();
 		final String to = bundle.getString(KEY_MAIL_TO_ADDR);
-		final String tx = bundle.getString(KEY_MAIL_POSITION);
+		final String tx = bundle.getString(KEY_POSITION_LINK);
 		new MailSender().to(to).with(tx).send();
 
 	}

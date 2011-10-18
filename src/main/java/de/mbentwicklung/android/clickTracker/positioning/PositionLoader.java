@@ -30,18 +30,27 @@ public class PositionLoader {
 	 * 
 	 */
 	public PositionLoader(final Context context, final Position position) {
-		this.locationManager = (LocationManager) context
-				.getSystemService(Context.LOCATION_SERVICE);
+		this.locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 		this.position = position;
 		this.ledManager = new LedManager(
-				(NotificationManager) context
-						.getSystemService(Context.NOTIFICATION_SERVICE));
+				(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE));
+	}
+
+	public boolean isGpsProviderEnabled() {
+		return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+	}
+
+	public boolean isNetworkProviderEnabled() {
+		return locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+	}
+
+	public boolean isLastKnownPositionProviderEnabled() {
+		return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER) != null;
 	}
 
 	public void loadLastKnownPosition() {
 		logger.info("load last position");
-		Location location = locationManager
-				.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
 		ledManager.startBlinking();
 		position.setLat(location.getLatitude());
@@ -61,9 +70,8 @@ public class PositionLoader {
 
 	private void loadPosition(final String locationProvider) {
 		final LocationListener locationListener = new SimpleLocationListener(this);
-		
-		locationManager.requestLocationUpdates(locationProvider, 1000L,
-				500.0f, locationListener);
+
+		locationManager.requestLocationUpdates(locationProvider, 1000L, 500.0f, locationListener);
 		ledManager.startBlinking();
 	}
 
