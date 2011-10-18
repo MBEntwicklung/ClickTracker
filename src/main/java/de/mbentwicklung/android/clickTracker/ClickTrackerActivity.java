@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -48,8 +49,16 @@ public class ClickTrackerActivity extends Activity {
 
 	private void initSelectBox() {
 		selectBox = (RadioGroup) findViewById(R.id.SelectPositionType);
+		
+		findViewById(R.id.gps).setEnabled(isProviderEnabled(LocationManager.GPS_PROVIDER));
+		findViewById(R.id.network).setEnabled(isProviderEnabled(LocationManager.NETWORK_PROVIDER));
+		
 	}
 
+	private boolean isProviderEnabled(final String provider) {
+		return ((LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE)).isProviderEnabled(provider);
+	}
+	
 	private void initMailEditText() {
 		mailEditText = (EditText) findViewById(R.id.mail_editText);
 		SharedPreferences preferences = getApplicationContext()

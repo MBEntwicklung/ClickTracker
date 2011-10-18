@@ -61,8 +61,7 @@ public class PositionLoader {
 
 	private void loadPosition(final String locationProvider) {
 		final LocationListener locationListener = new SimpleLocationListener(this);
-
-		locationManager.getAllProviders();
+		
 		locationManager.requestLocationUpdates(locationProvider, 1000L,
 				500.0f, locationListener);
 		ledManager.startBlinking();
