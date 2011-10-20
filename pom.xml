@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.mbentwicklung.android</groupId>
 	<artifactId>ClickTracker</artifactId>
@@ -173,4 +174,49 @@ limitations under the License.
 
 
 	</repositories>
+	<profiles>
+		<profile>
+			<id>sign</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jarsigner-plugin</artifactId>
+						<version>1.2</version>
+						<executions>
+							<execution>
+								<id>signing</id>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+								<phase>package</phase>
+								<inherited>true</inherited>
+								<configuration>
+									<archiveDirectory></archiveDirectory>
+									<includes>
+										<include>target/*.apk</include>
+									</includes>
+									<keystore>clicktracker.keystore</keystore>
+									<storepass>mbentwicklung</storepass>
+									<keypass>clicktracker</keypass>
+									<alias>clicktracker</alias>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>com.jayway.maven.plugins.android.generation2</groupId>
+						<artifactId>maven-android-plugin</artifactId>
+						<version>2.8.4</version>
+						<inherited>true</inherited>
+						<configuration>
+							<sign>
+								<debug>false</debug>
+							</sign>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
