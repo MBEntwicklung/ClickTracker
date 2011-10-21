@@ -2,11 +2,10 @@
 <resources>
 
 	<string name="app_name">ClickTracker</string>
-	<string name="description">Geben Sie die Mailadresse ein, an die Ihre aktuelle
-		Position gesendet werden soll. Wählen Sie, auf welche Art Ihre
-		Position bestimmt werden soll, GPS ist dabei die genauste, jedoch
-		dauert es einige Sekunden, bis so Ihre Position bestimmt ist. Klicken
-		Sie anschließend auf Senden.
+	<string name="description">Enter your e-mail address for sending your current
+		position. Choose the type of ascertaining the position whereas GPS is
+		most precisely. However it takes a few more seconds compared to the
+		other variants. Afterwards press "Send" to confirm.
 	</string>
 
 	<string name="click">Send</string>
@@ -16,10 +15,9 @@
 
 	<string name="mail_subject">Position - ClickTracker</string>
 	<string name="mail_text">
-		<p>Hallo,</p>
-		<p>über die Android App ClickTracker wurde dir eine Position von einem
-			Bekannten zugesant. Um diese Position zu sehen, klick auf den
-			folgenden Link:
+		<p>Hellp,</p>
+		<p>The position of a friend was sent to you via the Android App
+			"ClickTracker". To track click on the link below:
 		</p>
 	</string>
 </resources>
