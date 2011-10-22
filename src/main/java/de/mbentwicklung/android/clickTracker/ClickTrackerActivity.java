@@ -90,10 +90,12 @@ public class ClickTrackerActivity extends Activity {
 
 			@Override
 			public void onClick(View view) {
+				final String mail = mailEditText.getText().toString();
+				if (mail == null || mail.length() == 0) return;
+				
 				clickButton.setEnabled(false);
 				loadLocation();
-				PreferencesManager.writeMailAddress(getApplicationContext(), mailEditText.getText()
-						.toString());
+				PreferencesManager.writeMailAddress(getApplicationContext(), mail);
 			}
 		});
 	}
