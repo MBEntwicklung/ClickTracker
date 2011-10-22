@@ -15,7 +15,7 @@
 
 	<string name="mail_subject">Position - ClickTracker</string>
 	<string name="mail_text">
-		<p>Hellp,</p>
+		<p>Hello,</p>
 		<p>The position of a friend was sent to you via the Android App
 			"ClickTracker". To track click on the link below:
 		</p>
