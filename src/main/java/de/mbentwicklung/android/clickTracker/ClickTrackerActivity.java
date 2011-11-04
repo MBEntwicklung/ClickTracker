@@ -3,7 +3,12 @@
  */
 package de.mbentwicklung.android.clickTracker;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +17,7 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import de.mbentwicklung.android.clickTracker.mail.MailMessageBuilder;
 import de.mbentwicklung.android.clickTracker.mail.MailService;
+import de.mbentwicklung.android.clickTracker.mail.MailValidator;
 import de.mbentwicklung.android.clickTracker.positioning.Position;
 import de.mbentwicklung.android.clickTracker.positioning.PositionLoader;
 
@@ -35,6 +41,9 @@ public class ClickTrackerActivity extends Activity {
 
 	/** Positionlader */
 	private PositionLoader positionLoader;
+
+	/** Logger */
+	private final Logger logger = LoggerFactory.getLogger(ClickTrackerActivity.class);
 
 	/**
 	 * Erstelle Activity mit alle Komponenten
@@ -81,7 +90,7 @@ public class ClickTrackerActivity extends Activity {
 	}
 
 	/**
-	 * Konfiguriert den Senden Button 
+	 * Konfiguriert den Senden Button
 	 */
 	private void setupClickButton() {
 
@@ -91,8 +100,16 @@ public class ClickTrackerActivity extends Activity {
 			@Override
 			public void onClick(View view) {
 				final String mail = mailEditText.getText().toString();
-				if (mail == null || mail.length() == 0) return;
-				
+				if (!validateUi()) {
+					AlertDialog.Builder builder = new AlertDialog.Builder(activity());
+					builder.setTitle("Fehler")
+							.setNeutralButton("Weiter", new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int id) {
+									dialog.cancel();
+								}
+							}).setMessage("Fehlermeldung").show();
+					return;
+				}
 				clickButton.setEnabled(false);
 				loadLocation();
 				PreferencesManager.writeMailAddress(getApplicationContext(), mail);
@@ -117,6 +134,34 @@ public class ClickTrackerActivity extends Activity {
 		}
 	}
 
+	private boolean validateUi() {
+		final String mail = mailEditText.getText().toString();
+
+		// Mail Addresse eine Internetadresse
+		if (!MailValidator.isMailAddressValid(mail)) {
+			logger.debug("invalid mail address");
+			return false;
+		}
+
+		// PositionLoader Type ausgewählt
+		switch (selectBox.getCheckedRadioButtonId()) {
+		case R.id.gps:
+			if (positionLoader.isGpsProviderEnabled())
+				break;
+		case R.id.network:
+			if (positionLoader.isNetworkProviderEnabled())
+				break;
+		case R.id.last:
+			if (positionLoader.isLastKnownPositionProviderEnabled())
+				break;
+		default:
+			logger.debug("No provider selected");
+			return false;
+		}
+
+		return true;
+	}
+
 	/**
 	 * Starte {@link MailService} zum Versenden der Mail
 	 */
@@ -125,5 +170,9 @@ public class ClickTrackerActivity extends Activity {
 		intent.putExtra(MailService.KEY_POSITION_LINK, MailMessageBuilder.buildLinkWith(position));
 		intent.putExtra(MailService.KEY_MAIL_TO_ADDR, mailEditText.getText().toString());
 		startService(intent);
+	}
+
+	private Activity activity() {
+		return this;
 	}
 }
