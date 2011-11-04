@@ -20,4 +20,8 @@
 			"ClickTracker". To track click on the link below:
 		</p>
 	</string>
+	
+	<string name="errorTitle">Error</string>
+	<string name="errorText">Please check your input data.</string>
+	<string name="errorButton">Okay</string>
 </resources>
