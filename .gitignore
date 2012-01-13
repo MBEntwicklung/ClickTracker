@@ -1,2 +1,4 @@
-/target
-/libs
+target
+libs
+bin
+gen
