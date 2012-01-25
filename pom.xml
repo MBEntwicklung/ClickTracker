@@ -5,84 +5,15 @@
 	<groupId>de.mbentwicklung.android</groupId>
 	<artifactId>ClickTracker</artifactId>
 	<version>0.2.2-SNAPSHOT</version>
-	<packaging>apk</packaging>
 	<name>ClickTracker</name>
 	<description>A simple Android App to send your position with one click</description>
+	<packaging>pom</packaging>
 
-	<dependencies>
-		<!-- Android -->
-		<dependency>
-			<groupId>com.google.android</groupId>
-			<artifactId>android</artifactId>
-			<version>2.1.2</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<!-- Logger -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-android</artifactId>
-			<version>1.6.1-RC1</version>
-		</dependency>
-
-		<!-- Test -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.8.2</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>commons-validator</groupId>
-			<artifactId>commons-validator</artifactId>
-			<version>1.3.1</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>xml-apis</artifactId>
-					<groupId>xml-apis</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>commons-logging</artifactId>
-					<groupId>commons-logging</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>commons-logging</artifactId>
-					<groupId>commons-logging</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>commons-collections</artifactId>
-					<groupId>commons-collections</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>oro</groupId>
-			<artifactId>oro</artifactId>
-			<version>2.0.8</version>
-		</dependency>
-
-		<!-- lokal installierte Dependencies für das Verschicken von Mails -->
-		<dependency>
-			<groupId>javax.mail</groupId>
-			<artifactId>mail-android</artifactId>
-			<version>1.4</version>
-		</dependency>
-
-		<dependency>
-			<groupId>javax.activation</groupId>
-			<artifactId>activation-android</artifactId>
-			<version>1.4</version>
-		</dependency>
-
-		<dependency>
-			<groupId>javax.additionnal</groupId>
-			<artifactId>additionnal-android</artifactId>
-			<version>1.4</version>
-		</dependency>
-	</dependencies>
-
-
+	<modules>
+		<module>clicktracker-core</module>
+		<module>clicktracker-mail</module>
+		<module>clicktracker-facebook</module>
+	</modules>
 
 	<url>http://clicktracker.mb-entwicklung.de</url>
 	<inceptionYear>2011</inceptionYear>
@@ -159,93 +90,35 @@ limitations under the License.
 			<url>http://download.java.net/maven/2/</url>
 			<layout>default</layout>
 		</repository>
-
-
 	</repositories>
-	<build>
-		<sourceDirectory>src/main/java</sourceDirectory>
-		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
-			</plugin>
-			
-			<plugin>
-				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
-				<artifactId>maven-android-plugin</artifactId>
-				<version>2.9.0-beta-5</version>
-				<configuration>
-					<sdk>
-						<platform>7</platform>
-						<path>/opt/android-sdk-linux</path>
-					</sdk>
-					<coreLibrary>true</coreLibrary>
-				</configuration>
-				<extensions>true</extensions>
-			</plugin>
-			
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-release-plugin</artifactId>
-				<version>2.1</version>
-				<configuration />
-			</plugin>
-		</plugins>
-		<extensions>
-			<extension>
-				<groupId>org.apache.maven.wagon</groupId>
-				<artifactId>wagon-ftp</artifactId>
-				<version>1.0-beta-7</version>
-			</extension>
-		</extensions>
-	</build>
-	<profiles>
-		<profile>
-			<id>sign</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-jarsigner-plugin</artifactId>
-						<version>1.2</version>
-						<executions>
-							<execution>
-								<id>signing</id>
-								<goals>
-									<goal>sign</goal>
-								</goals>
-								<phase>package</phase>
-								<inherited>true</inherited>
-								<configuration>
-									<archiveDirectory />
-									<includes>
-										<include>target/*.apk</include>
-									</includes>
-									<keystore>clicktracker.keystore</keystore>
-									<storepass>mbentwicklung</storepass>
-									<keypass>clicktracker</keypass>
-									<alias>clicktracker</alias>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>com.jayway.maven.plugins.android.generation2</groupId>
-						<artifactId>maven-android-plugin</artifactId>
-						<version>3.0.2</version>
-						<inherited>true</inherited>
-						<configuration>
-							<sign>
-								<debug>false</debug>
-							</sign>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
+
+
+	<dependencyManagement>
+		<dependencies>
+
+			<!-- Android -->
+			<dependency>
+				<groupId>com.google.android</groupId>
+				<artifactId>android</artifactId>
+				<version>2.1.2</version>
+				<scope>provided</scope>
+			</dependency>
+
+			<!-- Logger -->
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-android</artifactId>
+				<version>1.6.1-RC1</version>
+			</dependency>
+
+			<!-- Test -->
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.8.2</version>
+				<scope>test</scope>
+			</dependency>
+		</dependencies>
+
+	</dependencyManagement>
 </project>

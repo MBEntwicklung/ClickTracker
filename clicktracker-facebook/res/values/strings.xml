@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<string name="app_name">ClickTrackerFacebook</string>
+	<string name="description">Enter your e-mail address for sending your current
+		position. Choose the type of ascertaining the position whereas GPS is
+		most precisely. However it takes a few more seconds compared to the
+		other variants. Afterwards press "Send" to confirm.
+	</string>
+
+	<string name="click">Send</string>
+	<string name="GPS">GPS</string>
+	<string name="network">Network</string>
+	<string name="lastPos">Last known Position</string>
+
+	<string name="mail_subject">Position - ClickTracker</string>
+	<string name="mail_text">
+		<p>Hello,</p>
+		<p>The position of a friend was sent to you via the Android App
+			"ClickTracker". To track click on the link below:
+		</p>
+	</string>
+	
+	<string name="errorTitle">Error</string>
+	<string name="errorText">Please check your input data.</string>
+	<string name="errorButton">Okay</string>
+</resources>
