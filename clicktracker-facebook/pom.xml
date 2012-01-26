@@ -36,6 +36,12 @@
 			<artifactId>clicktracker-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>de.mbentwicklung.com.facebook.android.sdk</groupId>
+			<artifactId>facebook-android-sdk</artifactId>
+			<version>1.1</version>
+		</dependency>
 	</dependencies>
 
 

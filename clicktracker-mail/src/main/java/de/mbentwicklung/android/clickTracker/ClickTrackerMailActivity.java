@@ -15,12 +15,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
-import de.mbentwicklung.android.clickTracker.mail.MailMessageBuilder;
 import de.mbentwicklung.android.clickTracker.mail.MailService;
 import de.mbentwicklung.android.clickTracker.mail.MailValidator;
 import de.mbentwicklung.android.clickTracker.mobileutils.PreferencesManager;
 import de.mbentwicklung.android.clickTracker.positioning.Position;
 import de.mbentwicklung.android.clickTracker.positioning.PositionLoader;
+import de.mbentwicklung.android.clickTracker.text.LinkBuilder;
 
 /**
  * 
@@ -179,7 +179,7 @@ public class ClickTrackerMailActivity extends Activity {
 	private void sendMailWithService() {
 		Intent intent = new Intent(this, MailService.class);
 		intent.putExtra(MailService.KEY_POSITION_LINK,
-				MailMessageBuilder.buildLinkWith(position));
+				LinkBuilder.buildLinkWith(position));
 		intent.putExtra(MailService.KEY_MAIL_TO_ADDR, mailEditText.getText()
 				.toString());
 		startService(intent);

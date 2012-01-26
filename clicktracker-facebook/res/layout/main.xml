@@ -11,27 +11,6 @@
         android:orientation="vertical"
         android:paddingTop="10dp" >
 
-        <EditText
-            android:id="@+id/mail_editText"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textEmailAddress" >
-
-            <requestFocus />
-        </EditText>
-
-        <EditText
-            android:id="@+id/pass_editText"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword" />
-
-        <Button
-            android:id="@+id/button_click"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/click" />
-
         <RadioGroup
             android:id="@+id/SelectPositionType"
             android:layout_width="wrap_content"
@@ -56,6 +35,12 @@
                 android:text="@string/network" />
         </RadioGroup>
 
+        <Button
+            android:id="@+id/button_click"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/click" />
+        
         <TextView
             android:id="@+id/textView1"
             android:layout_width="fill_parent"

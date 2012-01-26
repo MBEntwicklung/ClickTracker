@@ -1,14 +1,14 @@
 /**
  * 
  */
-package de.mbentwicklung.android.clickTracker.mail;
+package de.mbentwicklung.android.clickTracker.text;
 
 import de.mbentwicklung.android.clickTracker.positioning.Position;
 
 /**
  * @author Marc Bellmann <marc.bellmann@mb-entwicklung.de>
  */
-public class MailMessageBuilder {
+public class LinkBuilder {
 
 	/** Web Addresse der anzuzeigenden Webseite */
 	private static final String WEBSITE = "http://clicktracker.mb-entwicklung.de/";
