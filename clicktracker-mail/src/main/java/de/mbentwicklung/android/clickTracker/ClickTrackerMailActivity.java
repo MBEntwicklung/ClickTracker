@@ -7,14 +7,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import de.mbentwicklung.android.clickTracker.components.SimpleAlertDialogBuilder;
 import de.mbentwicklung.android.clickTracker.mail.MailService;
 import de.mbentwicklung.android.clickTracker.mail.MailValidator;
 import de.mbentwicklung.android.clickTracker.mobileutils.PreferencesManager;
@@ -44,8 +43,7 @@ public class ClickTrackerMailActivity extends Activity {
 	private PositionLoader positionLoader;
 
 	/** Logger */
-	private final Logger logger = LoggerFactory
-			.getLogger(ClickTrackerMailActivity.class);
+	private final Logger logger = LoggerFactory.getLogger(ClickTrackerMailActivity.class);
 
 	/**
 	 * Erstelle Activity mit alle Komponenten
@@ -78,12 +76,9 @@ public class ClickTrackerMailActivity extends Activity {
 	private void setupSelectBox() {
 		selectBox = (RadioGroup) findViewById(R.id.SelectPositionType);
 
-		findViewById(R.id.gps)
-				.setEnabled(positionLoader.isGpsProviderEnabled());
-		findViewById(R.id.network).setEnabled(
-				positionLoader.isNetworkProviderEnabled());
-		findViewById(R.id.last).setEnabled(
-				positionLoader.isLastKnownPositionProviderEnabled());
+		findViewById(R.id.gps).setEnabled(positionLoader.isGpsProviderEnabled());
+		findViewById(R.id.network).setEnabled(positionLoader.isNetworkProviderEnabled());
+		findViewById(R.id.last).setEnabled(positionLoader.isLastKnownPositionProviderEnabled());
 	}
 
 	/**
@@ -91,8 +86,7 @@ public class ClickTrackerMailActivity extends Activity {
 	 */
 	private void setupMailEditText() {
 		mailEditText = (EditText) findViewById(R.id.mail_editText);
-		mailEditText.setText(PreferencesManager
-				.readMailAddress(getApplicationContext()));
+		mailEditText.setText(PreferencesManager.readMailAddress(getApplicationContext()));
 	}
 
 	/**
@@ -107,23 +101,15 @@ public class ClickTrackerMailActivity extends Activity {
 			public void onClick(View view) {
 				final String mail = mailEditText.getText().toString();
 				if (!validateUi()) {
-					AlertDialog.Builder builder = new AlertDialog.Builder(
-							activity());
-					builder.setTitle(getText(R.string.errorTitle))
-							.setNeutralButton(getText(R.string.errorButton),
-									new DialogInterface.OnClickListener() {
-										public void onClick(
-												DialogInterface dialog, int id) {
-											dialog.cancel();
-										}
-									}).setMessage(getText(R.string.errorText))
-							.show();
+					new SimpleAlertDialogBuilder(activity(), // Activity
+							getText(R.string.errorTitle).toString(), // Title
+							getText(R.string.errorButton).toString(), // Button
+							getText(R.string.errorText).toString()).show();
 					return;
 				}
 				clickButton.setEnabled(false);
 				loadLocation();
-				PreferencesManager.writeMailAddress(getApplicationContext(),
-						mail);
+				PreferencesManager.writeMailAddress(getApplicationContext(), mail);
 			}
 		});
 	}
@@ -178,10 +164,8 @@ public class ClickTrackerMailActivity extends Activity {
 	 */
 	private void sendMailWithService() {
 		Intent intent = new Intent(this, MailService.class);
-		intent.putExtra(MailService.KEY_POSITION_LINK,
-				LinkBuilder.buildLinkWith(position));
-		intent.putExtra(MailService.KEY_MAIL_TO_ADDR, mailEditText.getText()
-				.toString());
+		intent.putExtra(MailService.KEY_POSITION_LINK, LinkBuilder.buildLinkWith(position));
+		intent.putExtra(MailService.KEY_MAIL_TO_ADDR, mailEditText.getText().toString());
 		startService(intent);
 	}
 

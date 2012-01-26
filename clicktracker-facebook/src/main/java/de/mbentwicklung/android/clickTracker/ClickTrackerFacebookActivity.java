@@ -8,8 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -21,6 +19,7 @@ import com.facebook.android.Facebook;
 import com.facebook.android.Facebook.DialogListener;
 import com.facebook.android.FacebookError;
 
+import de.mbentwicklung.android.clickTracker.components.SimpleAlertDialogBuilder;
 import de.mbentwicklung.android.clickTracker.positioning.Position;
 import de.mbentwicklung.android.clickTracker.positioning.PositionLoader;
 import de.mbentwicklung.android.clickTracker.text.LinkBuilder;
@@ -88,11 +87,17 @@ public class ClickTrackerFacebookActivity extends Activity {
 		facebook.authorize(this, new String[] { "publish_stream" }, new DialogListener() {
 
 			public void onFacebookError(FacebookError e) {
-				logger.error(e.toString());
+				new SimpleAlertDialogBuilder(activity(), // Activity
+						getText(R.string.errorTitle).toString(), // Title
+						getText(R.string.errorButton).toString(), // Button
+						e.toString()).show();
 			}
 
 			public void onError(DialogError e) {
-				logger.error(e.toString());
+				new SimpleAlertDialogBuilder(activity(), // Activity
+						getText(R.string.errorTitle).toString(), // Title
+						getText(R.string.errorButton).toString(), // Button
+						e.toString()).show();
 			}
 
 			public void onComplete(Bundle arg0) {
@@ -101,17 +106,19 @@ public class ClickTrackerFacebookActivity extends Activity {
 				params.putString("message", getText(R.string.mail_text).toString());
 				params.putString("link", LinkBuilder.buildLinkWith(position).toString());
 				params.putString("name", getText(R.string.app_name).toString());
-//				params.putString("description", getText(R.string.mail_text).toString());
+				// params.putString("description", getText(R.string.mail_text).toString());
 
 				try {
 					facebook.request("me/feed", params, "POST");
 				} catch (Exception e) {
-					logger.error(e.toString());
+					new SimpleAlertDialogBuilder(activity(), // Activity
+							getText(R.string.errorTitle).toString(), // Title
+							getText(R.string.errorButton).toString(), // Button
+							e.toString()).show();
 				}
 			}
 
 			public void onCancel() {
-				logger.error("Cancel");
 			}
 		});
 
@@ -139,13 +146,10 @@ public class ClickTrackerFacebookActivity extends Activity {
 			@Override
 			public void onClick(View view) {
 				if (!validateUi()) {
-					AlertDialog.Builder builder = new AlertDialog.Builder(activity());
-					builder.setTitle(getText(R.string.errorTitle))
-							.setNeutralButton(getText(R.string.errorButton), new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog, int id) {
-									dialog.cancel();
-								}
-							}).setMessage(getText(R.string.errorText)).show();
+					new SimpleAlertDialogBuilder(activity(), // Activity
+							getText(R.string.errorTitle).toString(), // Title
+							getText(R.string.errorButton).toString(), // Button
+							getText(R.string.errorText).toString()).show();
 					return;
 				}
 				clickButton.setEnabled(false);
