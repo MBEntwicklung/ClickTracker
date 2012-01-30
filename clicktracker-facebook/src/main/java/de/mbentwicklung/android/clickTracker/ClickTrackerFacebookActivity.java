@@ -7,7 +7,6 @@ package de.mbentwicklung.android.clickTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -19,8 +18,8 @@ import com.facebook.android.Facebook;
 import com.facebook.android.Facebook.DialogListener;
 import com.facebook.android.FacebookError;
 
+import de.mbentwicklung.android.clickTracker.components.ClickTrackerActivity;
 import de.mbentwicklung.android.clickTracker.components.SimpleAlertDialogBuilder;
-import de.mbentwicklung.android.clickTracker.positioning.Position;
 import de.mbentwicklung.android.clickTracker.positioning.PositionLoader;
 import de.mbentwicklung.android.clickTracker.text.LinkBuilder;
 
@@ -28,7 +27,7 @@ import de.mbentwicklung.android.clickTracker.text.LinkBuilder;
  * 
  * @author Marc Bellmann <marc.bellmann@mb-entwicklung.de>
  */
-public class ClickTrackerFacebookActivity extends Activity {
+public class ClickTrackerFacebookActivity extends ClickTrackerActivity {
 
 	private final Facebook facebook = new Facebook("154566434657670");
 
@@ -37,12 +36,6 @@ public class ClickTrackerFacebookActivity extends Activity {
 
 	/** Auswahlbox */
 	private RadioGroup selectBox;
-
-	/** Aktuelle Position */
-	private Position position;
-
-	/** Positionlader */
-	private PositionLoader positionLoader;
 
 	/** Logger */
 	private final Logger logger = LoggerFactory.getLogger(ClickTrackerFacebookActivity.class);
@@ -54,18 +47,6 @@ public class ClickTrackerFacebookActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-
-		position = new Position() {
-			/** serialVersionUID */
-			private static final long serialVersionUID = 814576456000699370L;
-
-			@Override
-			public void positionLoaded() {
-				sendToFacebook();
-				clickButton.setEnabled(true);
-			}
-		};
-		positionLoader = new PositionLoader(getApplicationContext(), position);
 
 		setupSelectBox();
 		setupClickButton();
@@ -82,7 +63,7 @@ public class ClickTrackerFacebookActivity extends Activity {
 		facebook.extendAccessTokenIfNeeded(this, null);
 	}
 
-	private void sendToFacebook() {
+	protected void sendPosition() {
 
 		facebook.authorize(this, new String[] { "publish_stream" }, new DialogListener() {
 
@@ -104,7 +85,7 @@ public class ClickTrackerFacebookActivity extends Activity {
 
 				final Bundle params = new Bundle();
 				params.putString("message", getText(R.string.mail_text).toString());
-				params.putString("link", LinkBuilder.buildLinkWith(position).toString());
+				params.putString("link", LinkBuilder.buildLinkWith(getPosition()).toString());
 				params.putString("name", getText(R.string.app_name).toString());
 				// params.putString("description", getText(R.string.mail_text).toString());
 
@@ -122,6 +103,7 @@ public class ClickTrackerFacebookActivity extends Activity {
 			}
 		});
 
+		clickButton.setEnabled(true);
 	}
 
 	/**
@@ -130,9 +112,9 @@ public class ClickTrackerFacebookActivity extends Activity {
 	private void setupSelectBox() {
 		selectBox = (RadioGroup) findViewById(R.id.SelectPositionType);
 
-		findViewById(R.id.gps).setEnabled(positionLoader.isGpsProviderEnabled());
-		findViewById(R.id.network).setEnabled(positionLoader.isNetworkProviderEnabled());
-		findViewById(R.id.last).setEnabled(positionLoader.isLastKnownPositionProviderEnabled());
+		findViewById(R.id.gps).setEnabled(getPositionLoader().isGpsProviderEnabled());
+		findViewById(R.id.network).setEnabled(getPositionLoader().isNetworkProviderEnabled());
+		findViewById(R.id.last).setEnabled(getPositionLoader().isLastKnownPositionProviderEnabled());
 	}
 
 	/**
@@ -164,29 +146,29 @@ public class ClickTrackerFacebookActivity extends Activity {
 	private void loadLocation() {
 		switch (selectBox.getCheckedRadioButtonId()) {
 		case R.id.gps:
-			positionLoader.loadGPSPosition();
+			getPositionLoader().loadGPSPosition();
 			break;
 		case R.id.network:
-			positionLoader.loadNetworkPosition();
+			getPositionLoader().loadNetworkPosition();
 			break;
 		case R.id.last:
-			positionLoader.loadLastKnownPosition();
+			getPositionLoader().loadLastKnownPosition();
 			break;
 		}
 	}
 
-	private boolean validateUi() {
+	protected boolean validateUi() {
 
 		// PositionLoader Type ausgewählt
 		switch (selectBox.getCheckedRadioButtonId()) {
 		case R.id.gps:
-			if (positionLoader.isGpsProviderEnabled())
+			if (getPositionLoader().isGpsProviderEnabled())
 				break;
 		case R.id.network:
-			if (positionLoader.isNetworkProviderEnabled())
+			if (getPositionLoader().isNetworkProviderEnabled())
 				break;
 		case R.id.last:
-			if (positionLoader.isLastKnownPositionProviderEnabled())
+			if (getPositionLoader().isLastKnownPositionProviderEnabled())
 				break;
 		default:
 			logger.debug("No provider selected");
@@ -194,9 +176,5 @@ public class ClickTrackerFacebookActivity extends Activity {
 		}
 
 		return true;
-	}
-
-	private Activity activity() {
-		return this;
 	}
 }

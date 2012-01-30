@@ -12,7 +12,10 @@
 	<packaging>apk</packaging>
 	<name>ClickTracker for Mail</name>
 
-
+	<properties>
+		<android.sdk.path>/opt/android-sdk-linux/</android.sdk.path>
+	</properties>
+	
 	<dependencies>
 		<!-- Android -->
 		<dependency>
@@ -31,7 +34,7 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 		</dependency>
-		
+
 		<!-- Core Modul -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
@@ -104,11 +107,10 @@
 			<plugin>
 				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
 				<artifactId>maven-android-plugin</artifactId>
-				<version>2.9.0-beta-5</version>
+				<version>3.0.0-alpha-11</version>
 				<configuration>
 					<sdk>
 						<platform>7</platform>
-						<path>/opt/android-sdk-linux</path>
 					</sdk>
 					<coreLibrary>true</coreLibrary>
 				</configuration>

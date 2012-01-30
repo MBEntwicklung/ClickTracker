@@ -5,12 +5,15 @@
 		<artifactId>ClickTracker</artifactId>
 		<groupId>de.mbentwicklung.android</groupId>
 		<version>0.2.2-SNAPSHOT</version>
-		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>clicktracker-facebook</artifactId>
 	<packaging>apk</packaging>
 	<name>ClickTracker for Facebook</name>
 
+	<properties>
+		<android.sdk.path>/opt/android-sdk-linux/</android.sdk.path>
+	</properties>
+	
 	<dependencies>
 		<!-- Android -->
 		<dependency>
@@ -60,11 +63,10 @@
 			<plugin>
 				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
 				<artifactId>maven-android-plugin</artifactId>
-				<version>2.9.0-beta-5</version>
+				<version>3.0.0-alpha-11</version>
 				<configuration>
 					<sdk>
 						<platform>7</platform>
-						<path>/opt/android-sdk-linux</path>
 					</sdk>
 					<coreLibrary>true</coreLibrary>
 				</configuration>
@@ -119,7 +121,7 @@
 					<plugin>
 						<groupId>com.jayway.maven.plugins.android.generation2</groupId>
 						<artifactId>maven-android-plugin</artifactId>
-						<version>3.0.2</version>
+						<version>3.0.0-alpha-11</version>
 						<inherited>true</inherited>
 						<configuration>
 							<sign>

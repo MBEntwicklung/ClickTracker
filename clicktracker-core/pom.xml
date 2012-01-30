@@ -5,7 +5,6 @@
 		<artifactId>ClickTracker</artifactId>
 		<groupId>de.mbentwicklung.android</groupId>
 		<version>0.2.2-SNAPSHOT</version>
-		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>clicktracker-core</artifactId>
 	<name>ClickTracker Core Classes</name>

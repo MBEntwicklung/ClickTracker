@@ -6,18 +6,17 @@ package de.mbentwicklung.android.clickTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import de.mbentwicklung.android.clickTracker.components.ClickTrackerActivity;
 import de.mbentwicklung.android.clickTracker.components.SimpleAlertDialogBuilder;
 import de.mbentwicklung.android.clickTracker.mail.MailService;
 import de.mbentwicklung.android.clickTracker.mail.MailValidator;
 import de.mbentwicklung.android.clickTracker.mobileutils.PreferencesManager;
-import de.mbentwicklung.android.clickTracker.positioning.Position;
 import de.mbentwicklung.android.clickTracker.positioning.PositionLoader;
 import de.mbentwicklung.android.clickTracker.text.LinkBuilder;
 
@@ -25,7 +24,7 @@ import de.mbentwicklung.android.clickTracker.text.LinkBuilder;
  * 
  * @author Marc Bellmann <marc.bellmann@mb-entwicklung.de>
  */
-public class ClickTrackerMailActivity extends Activity {
+public class ClickTrackerMailActivity extends ClickTrackerActivity {
 
 	/** Senden Button */
 	private Button clickButton;
@@ -35,12 +34,6 @@ public class ClickTrackerMailActivity extends Activity {
 
 	/** Auswahlbox */
 	private RadioGroup selectBox;
-
-	/** Aktuelle Position */
-	private Position position;
-
-	/** Positionlader */
-	private PositionLoader positionLoader;
 
 	/** Logger */
 	private final Logger logger = LoggerFactory.getLogger(ClickTrackerMailActivity.class);
@@ -53,18 +46,6 @@ public class ClickTrackerMailActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		position = new Position() {
-			/** serialVersionUID */
-			private static final long serialVersionUID = 814576456000699370L;
-
-			@Override
-			public void positionLoaded() {
-				sendMailWithService();
-				clickButton.setEnabled(true);
-			}
-		};
-		positionLoader = new PositionLoader(getApplicationContext(), position);
-
 		setupMailEditText();
 		setupSelectBox();
 		setupClickButton();
@@ -76,9 +57,9 @@ public class ClickTrackerMailActivity extends Activity {
 	private void setupSelectBox() {
 		selectBox = (RadioGroup) findViewById(R.id.SelectPositionType);
 
-		findViewById(R.id.gps).setEnabled(positionLoader.isGpsProviderEnabled());
-		findViewById(R.id.network).setEnabled(positionLoader.isNetworkProviderEnabled());
-		findViewById(R.id.last).setEnabled(positionLoader.isLastKnownPositionProviderEnabled());
+		findViewById(R.id.gps).setEnabled(getPositionLoader().isGpsProviderEnabled());
+		findViewById(R.id.network).setEnabled(getPositionLoader().isNetworkProviderEnabled());
+		findViewById(R.id.last).setEnabled(getPositionLoader().isLastKnownPositionProviderEnabled());
 	}
 
 	/**
@@ -120,18 +101,18 @@ public class ClickTrackerMailActivity extends Activity {
 	private void loadLocation() {
 		switch (selectBox.getCheckedRadioButtonId()) {
 		case R.id.gps:
-			positionLoader.loadGPSPosition();
+			getPositionLoader().loadGPSPosition();
 			break;
 		case R.id.network:
-			positionLoader.loadNetworkPosition();
+			getPositionLoader().loadNetworkPosition();
 			break;
 		case R.id.last:
-			positionLoader.loadLastKnownPosition();
+			getPositionLoader().loadLastKnownPosition();
 			break;
 		}
 	}
 
-	private boolean validateUi() {
+	protected boolean validateUi() {
 		final String mail = mailEditText.getText().toString();
 
 		// Mail Addresse eine Internetadresse
@@ -143,13 +124,13 @@ public class ClickTrackerMailActivity extends Activity {
 		// PositionLoader Type ausgewählt
 		switch (selectBox.getCheckedRadioButtonId()) {
 		case R.id.gps:
-			if (positionLoader.isGpsProviderEnabled())
+			if (getPositionLoader().isGpsProviderEnabled())
 				break;
 		case R.id.network:
-			if (positionLoader.isNetworkProviderEnabled())
+			if (getPositionLoader().isNetworkProviderEnabled())
 				break;
 		case R.id.last:
-			if (positionLoader.isLastKnownPositionProviderEnabled())
+			if (getPositionLoader().isLastKnownPositionProviderEnabled())
 				break;
 		default:
 			logger.debug("No provider selected");
@@ -162,14 +143,12 @@ public class ClickTrackerMailActivity extends Activity {
 	/**
 	 * Starte {@link MailService} zum Versenden der Mail
 	 */
-	private void sendMailWithService() {
+	protected void sendPosition() {
 		Intent intent = new Intent(this, MailService.class);
-		intent.putExtra(MailService.KEY_POSITION_LINK, LinkBuilder.buildLinkWith(position));
+		intent.putExtra(MailService.KEY_POSITION_LINK, LinkBuilder.buildLinkWith(getPosition()));
 		intent.putExtra(MailService.KEY_MAIL_TO_ADDR, mailEditText.getText().toString());
 		startService(intent);
-	}
-
-	private Activity activity() {
-		return this;
+		
+		clickButton.setEnabled(true);
 	}
 }
