@@ -13,6 +13,7 @@
 		<module>clicktracker-core</module>
 		<module>clicktracker-mail</module>
 		<module>clicktracker-facebook</module>
+		<module>clicktracker-website</module>
 	</modules>
 
 	<url>http://clicktracker.mb-entwicklung.de</url>
