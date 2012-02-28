@@ -22,6 +22,7 @@ public abstract class ClickTrackerActivity extends Activity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
 		position = createPosition();
 		positionLoader = new PositionLoader(getApplicationContext(), position);

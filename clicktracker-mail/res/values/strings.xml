@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<string name="app_name">ClickTrackerMail</string>
+	<string name="app_name">ClickTracker - Mail</string>
 	<string name="description">Enter your e-mail address for sending your current
 		position. Choose the type of ascertaining the position whereas GPS is
 		most precisely. However it takes a few more seconds compared to the

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<string name="app_name">ClickTrackerMail</string>
+	<string name="app_name">ClickTracker - Mail</string>
 	<string name="description">Geben Sie die Mailadresse ein, an die Ihre aktuelle
 		Position gesendet werden soll. Wählen Sie die Art der
 		Positionsbestimmung, wobei GPS am genauesten ist, jedoch einige
