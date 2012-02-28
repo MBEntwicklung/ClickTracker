@@ -22,6 +22,6 @@
 	</string>
 
 	<string name="errorTitle">Fehler</string>
-	<string name="errorText">Bitte überprüfen Sie Ihre eigegeben Daten.</string>
+	<string name="errorText">Bitte überprüfen Sie Ihre eingegebenen Daten.</string>
 	<string name="errorButton">Okay</string>
 </resources>
