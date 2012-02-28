@@ -88,7 +88,7 @@ public class ClickTrackerFacebookActivity extends ClickTrackerActivity {
 				params.putString("message", getText(R.string.mail_text).toString());
 				params.putString("link", LinkBuilder.buildLinkWith(getPosition()).toString());
 				params.putString("name", getText(R.string.app_name).toString());
-				// params.putString("description", getText(R.string.mail_text).toString());
+				params.putString("image", "http://clicktracker.mb-entwicklung.de/files/clicktracker.png");
 
 				try {
 					facebook.request("me/feed", params, "POST");
