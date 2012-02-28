@@ -130,7 +130,8 @@
 		</extensions>
 		<pluginManagement>
 			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
@@ -164,50 +165,4 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-	<profiles>
-		<profile>
-			<id>sign</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-jarsigner-plugin</artifactId>
-						<version>1.2</version>
-						<executions>
-							<execution>
-								<id>signing</id>
-								<goals>
-									<goal>sign</goal>
-								</goals>
-								<phase>package</phase>
-								<inherited>true</inherited>
-								<configuration>
-									<archiveDirectory />
-									<includes>
-										<include>target/*.apk</include>
-									</includes>
-									<keystore>clicktracker.keystore</keystore>
-									<storepass>mbentwicklung</storepass>
-									<keypass>clicktracker</keypass>
-									<alias>clicktracker</alias>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>com.jayway.maven.plugins.android.generation2</groupId>
-						<artifactId>android-maven-plugin</artifactId>
-						<version>3.1.1</version>
-
-						<inherited>true</inherited>
-						<configuration>
-							<sign>
-								<debug>false</debug>
-							</sign>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
 </project>
