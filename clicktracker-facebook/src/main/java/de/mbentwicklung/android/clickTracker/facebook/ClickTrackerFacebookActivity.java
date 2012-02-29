@@ -1,7 +1,8 @@
+package de.mbentwicklung.android.clickTracker.facebook;
+
 /**
  * 
  */
-package de.mbentwicklung.android.clickTracker;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,13 +11,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.RadioGroup;
+
+import com.facebook.android.DialogError;
+import com.facebook.android.Facebook;
+import com.facebook.android.Facebook.DialogListener;
+import com.facebook.android.FacebookError;
+
 import de.mbentwicklung.android.clickTracker.components.ClickTrackerActivity;
 import de.mbentwicklung.android.clickTracker.components.SimpleAlertDialogBuilder;
-import de.mbentwicklung.android.clickTracker.mail.MailService;
-import de.mbentwicklung.android.clickTracker.mail.MailValidator;
-import de.mbentwicklung.android.clickTracker.mobileutils.PreferencesManager;
 import de.mbentwicklung.android.clickTracker.positioning.PositionLoader;
 import de.mbentwicklung.android.clickTracker.text.LinkBuilder;
 
@@ -24,19 +27,18 @@ import de.mbentwicklung.android.clickTracker.text.LinkBuilder;
  * 
  * @author Marc Bellmann <marc.bellmann@mb-entwicklung.de>
  */
-public class ClickTrackerMailActivity extends ClickTrackerActivity {
+public class ClickTrackerFacebookActivity extends ClickTrackerActivity {
+
+	private final Facebook facebook = new Facebook("154566434657670");
 
 	/** Senden Button */
 	private Button clickButton;
-
-	/** Maileingabefeld */
-	private EditText mailEditText;
 
 	/** Auswahlbox */
 	private RadioGroup selectBox;
 
 	/** Logger */
-	private final Logger logger = LoggerFactory.getLogger(ClickTrackerMailActivity.class);
+	private final Logger logger = LoggerFactory.getLogger(ClickTrackerFacebookActivity.class);
 
 	/**
 	 * Erstelle Activity mit alle Komponenten
@@ -46,9 +48,63 @@ public class ClickTrackerMailActivity extends ClickTrackerActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		setupMailEditText();
 		setupSelectBox();
 		setupClickButton();
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		facebook.authorizeCallback(requestCode, resultCode, data);
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		facebook.extendAccessTokenIfNeeded(this, null);
+	}
+
+	protected void sendPosition() {
+
+		facebook.authorize(this, new String[] { "publish_stream" }, new DialogListener() {
+
+			public void onFacebookError(FacebookError e) {
+				new SimpleAlertDialogBuilder(activity(), // Activity
+						getText(R.string.errorTitle).toString(), // Title
+						getText(R.string.errorButton).toString(), // Button
+						e.toString()).show();
+			}
+
+			public void onError(DialogError e) {
+				new SimpleAlertDialogBuilder(activity(), // Activity
+						getText(R.string.errorTitle).toString(), // Title
+						getText(R.string.errorButton).toString(), // Button
+						e.toString()).show();
+			}
+
+			public void onComplete(Bundle arg0) {
+
+				final Bundle params = new Bundle();
+				params.putString("message", getText(R.string.mail_text).toString());
+				params.putString("link", LinkBuilder.buildLinkWith(getPosition()).toString());
+				params.putString("name", getText(R.string.app_name).toString());
+				params.putString("image", "http://clicktracker.mb-entwicklung.de/files/clicktracker.png");
+
+				try {
+					facebook.request("me/feed", params, "POST");
+				} catch (Exception e) {
+					new SimpleAlertDialogBuilder(activity(), // Activity
+							getText(R.string.errorTitle).toString(), // Title
+							getText(R.string.errorButton).toString(), // Button
+							e.toString()).show();
+				}
+			}
+
+			public void onCancel() {
+			}
+		});
+
+		clickButton.setEnabled(true);
 	}
 
 	/**
@@ -63,14 +119,6 @@ public class ClickTrackerMailActivity extends ClickTrackerActivity {
 	}
 
 	/**
-	 * Konfiguriert das Maileingabefeld
-	 */
-	private void setupMailEditText() {
-		mailEditText = (EditText) findViewById(R.id.mail_editText);
-		mailEditText.setText(PreferencesManager.readMailAddress(getApplicationContext()));
-	}
-
-	/**
 	 * Konfiguriert den Senden Button
 	 */
 	private void setupClickButton() {
@@ -80,7 +128,6 @@ public class ClickTrackerMailActivity extends ClickTrackerActivity {
 
 			@Override
 			public void onClick(View view) {
-				final String mail = mailEditText.getText().toString();
 				if (!validateUi()) {
 					new SimpleAlertDialogBuilder(activity(), // Activity
 							getText(R.string.errorTitle).toString(), // Title
@@ -90,7 +137,6 @@ public class ClickTrackerMailActivity extends ClickTrackerActivity {
 				}
 				clickButton.setEnabled(false);
 				loadLocation();
-				PreferencesManager.writeMailAddress(getApplicationContext(), mail);
 			}
 		});
 	}
@@ -113,13 +159,6 @@ public class ClickTrackerMailActivity extends ClickTrackerActivity {
 	}
 
 	protected boolean validateUi() {
-		final String mail = mailEditText.getText().toString();
-
-		// Mail Addresse eine Internetadresse
-		if (!MailValidator.isMailAddressValid(mail)) {
-			logger.debug("invalid mail address");
-			return false;
-		}
 
 		// PositionLoader Type ausgewählt
 		switch (selectBox.getCheckedRadioButtonId()) {
@@ -138,17 +177,5 @@ public class ClickTrackerMailActivity extends ClickTrackerActivity {
 		}
 
 		return true;
-	}
-
-	/**
-	 * Starte {@link MailService} zum Versenden der Mail
-	 */
-	protected void sendPosition() {
-		Intent intent = new Intent(this, MailService.class);
-		intent.putExtra(MailService.KEY_POSITION_LINK, LinkBuilder.buildLinkWith(getPosition()));
-		intent.putExtra(MailService.KEY_MAIL_TO_ADDR, mailEditText.getText().toString());
-		startService(intent);
-		
-		clickButton.setEnabled(true);
 	}
 }

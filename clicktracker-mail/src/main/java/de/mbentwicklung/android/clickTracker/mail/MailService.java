@@ -6,7 +6,6 @@ package de.mbentwicklung.android.clickTracker.mail;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 
-import de.mbentwicklung.android.clickTracker.R;
 import android.app.IntentService;
 import android.content.Intent;
 import android.os.Bundle;
