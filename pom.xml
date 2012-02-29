@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.mbentwicklung.android</groupId>
 	<artifactId>ClickTracker</artifactId>
-	<version>0.3.0</version>
+	<version>0.3.1-SNAPSHOT</version>
 	<name>ClickTracker</name>
 	<description>A simple Android App to send your position with one click</description>
 	<packaging>pom</packaging>
