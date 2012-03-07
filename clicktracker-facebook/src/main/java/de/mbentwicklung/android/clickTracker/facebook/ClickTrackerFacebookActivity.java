@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.RadioGroup;
 
@@ -48,14 +49,19 @@ public class ClickTrackerFacebookActivity extends ClickTrackerActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		setupSelectBox();
-		setupClickButton();
+		selectBox = (RadioGroup) findViewById(R.id.SelectPositionType);
+		clickButton = (Button) findViewById(R.id.button_click);
+		clickButton.setOnClickListener(createSendButtonListener());
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		facebook.authorizeCallback(requestCode, resultCode, data);
+
+		findViewById(R.id.gps).setEnabled(getPositionLoader().isGpsProviderEnabled());
+		findViewById(R.id.network).setEnabled(getPositionLoader().isNetworkProviderEnabled());
+		findViewById(R.id.last).setEnabled(getPositionLoader().isLastKnownPositionProviderEnabled());
 	}
 
 	@Override
@@ -107,24 +113,8 @@ public class ClickTrackerFacebookActivity extends ClickTrackerActivity {
 		clickButton.setEnabled(true);
 	}
 
-	/**
-	 * Konfiguriere die Auswahlfelder
-	 */
-	private void setupSelectBox() {
-		selectBox = (RadioGroup) findViewById(R.id.SelectPositionType);
-
-		findViewById(R.id.gps).setEnabled(getPositionLoader().isGpsProviderEnabled());
-		findViewById(R.id.network).setEnabled(getPositionLoader().isNetworkProviderEnabled());
-		findViewById(R.id.last).setEnabled(getPositionLoader().isLastKnownPositionProviderEnabled());
-	}
-
-	/**
-	 * Konfiguriert den Senden Button
-	 */
-	private void setupClickButton() {
-
-		clickButton = (Button) findViewById(R.id.button_click);
-		clickButton.setOnClickListener(new View.OnClickListener() {
+	private OnClickListener createSendButtonListener() {
+		return new View.OnClickListener() {
 
 			@Override
 			public void onClick(View view) {
@@ -138,7 +128,7 @@ public class ClickTrackerFacebookActivity extends ClickTrackerActivity {
 				clickButton.setEnabled(false);
 				loadLocation();
 			}
-		});
+		};
 	}
 
 	/**

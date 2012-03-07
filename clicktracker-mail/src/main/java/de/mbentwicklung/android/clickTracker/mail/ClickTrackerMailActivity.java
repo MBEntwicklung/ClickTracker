@@ -6,6 +6,7 @@ package de.mbentwicklung.android.clickTracker.mail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -44,16 +45,17 @@ public class ClickTrackerMailActivity extends ClickTrackerActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		setupMailEditText();
-		setupSelectBox();
-		setupClickButton();
+		mailEditText = (EditText) findViewById(R.id.mail_editText);
+		selectBox = (RadioGroup) findViewById(R.id.SelectPositionType);
+		clickButton = (Button) findViewById(R.id.button_click);
+		clickButton.setOnClickListener(createSendButtonListener());
 	}
 
-	/**
-	 * Konfiguriere die Auswahlfelder
-	 */
-	private void setupSelectBox() {
-		selectBox = (RadioGroup) findViewById(R.id.SelectPositionType);
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		mailEditText.setText(PreferencesManager.readMailAddress(getApplicationContext()));
 
 		findViewById(R.id.gps).setEnabled(getPositionLoader().isGpsProviderEnabled());
 		findViewById(R.id.network).setEnabled(getPositionLoader().isNetworkProviderEnabled());
@@ -61,20 +63,12 @@ public class ClickTrackerMailActivity extends ClickTrackerActivity {
 	}
 
 	/**
-	 * Konfiguriert das Maileingabefeld
+	 * Erstelle einen {@link OnClickListener} für den Senden Button
+	 * 
+	 * @return {@link OnClickListener}
 	 */
-	private void setupMailEditText() {
-		mailEditText = (EditText) findViewById(R.id.mail_editText);
-		mailEditText.setText(PreferencesManager.readMailAddress(getApplicationContext()));
-	}
-
-	/**
-	 * Konfiguriert den Senden Button
-	 */
-	private void setupClickButton() {
-
-		clickButton = (Button) findViewById(R.id.button_click);
-		clickButton.setOnClickListener(new View.OnClickListener() {
+	private View.OnClickListener createSendButtonListener() {
+		return new View.OnClickListener() {
 
 			@Override
 			public void onClick(View view) {
@@ -90,7 +84,7 @@ public class ClickTrackerMailActivity extends ClickTrackerActivity {
 				loadLocation();
 				PreferencesManager.writeMailAddress(getApplicationContext(), mail);
 			}
-		});
+		};
 	}
 
 	/**
@@ -146,7 +140,7 @@ public class ClickTrackerMailActivity extends ClickTrackerActivity {
 		intent.putExtra(MailService.KEY_POSITION_LINK, LinkBuilder.buildLinkWith(getPosition()));
 		intent.putExtra(MailService.KEY_MAIL_TO_ADDR, mailEditText.getText().toString());
 		startService(intent);
-		
+
 		clickButton.setEnabled(true);
 	}
 }
