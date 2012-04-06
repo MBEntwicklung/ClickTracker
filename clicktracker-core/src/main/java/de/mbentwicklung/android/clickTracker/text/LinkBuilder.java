@@ -11,7 +11,7 @@ import de.mbentwicklung.android.clickTracker.positioning.Position;
 public class LinkBuilder {
 
 	/** Web Addresse der anzuzeigenden Webseite */
-	private static final String WEBSITE = "http://clicktracker.mb-entwicklung.de/";
+	private static final String WEBSITE = "http://www.click-tracker.org/";
 
 	public static final String buildLinkWith(final Position position) {
 		StringBuilder builder = new StringBuilder();
