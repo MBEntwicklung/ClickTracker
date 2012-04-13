@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<string name="app_name">ClickTracker - Google+</string>
+	<string name="description">Choose the type of ascertaining the position whereas GPS is
+		most precisely. However it takes a few more seconds compared to the
+		other variants. Afterwards press "Send" to confirm.
+	</string>
+
+	<string name="click">Send</string>
+	<string name="GPS">GPS</string>
+	<string name="network">Network</string>
+	<string name="lastPos">Last known Position</string>
+
+	<string name="mail_subject">Position - ClickTracker</string>
+	<string name="mail_text">
+		<p>Hey, with the following link you can see my current position. This
+			information was sent by the Android App ClickTracker.
+		</p>
+	</string>
+
+	<string name="errorTitle">Error</string>
+	<string name="errorText">Please check your input data.</string>
+	<string name="errorButton">Okay</string>
+</resources>

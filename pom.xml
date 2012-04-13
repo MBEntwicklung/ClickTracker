@@ -12,6 +12,7 @@
 		<module>clicktracker-core</module>
 		<module>clicktracker-mail</module>
 		<module>clicktracker-facebook</module>
+		<module>clicktracker-google-plus</module>
 		<module>clicktracker-website</module>
 	</modules>
 

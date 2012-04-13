@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<string name="app_name">ClickTracker - Google+</string>
+	<string name="description">Wählen Sie die Art der
+		Positionsbestimmung, wobei GPS am genauesten ist, jedoch einige
+		Sekunden länger für die Ermittlung beanspruchen kann. Klicken Sie
+		anschließend auf Senden.
+	</string>
+
+	<string name="click">Senden</string>
+	<string name="GPS">GPS</string>
+	<string name="network">Mobilfunktnetzwerk</string>
+	<string name="lastPos">Letzte bekannte Position</string>
+
+	<string name="mail_subject">Position - ClickTracker</string>
+	<string name="mail_text">
+		<p>Hey, über den folgenden Link kannst du meine derzeitige Position
+			sehen. Diese Information wurde mit der Android App "ClickTracker"
+			gesendet.
+		</p>
+	</string>
+
+	<string name="errorTitle">Fehler</string>
+	<string name="errorText">Bitte überprüfen Sie Ihre eingegebenen Daten.</string>
+	<string name="errorButton">Okay</string>
+</resources>
